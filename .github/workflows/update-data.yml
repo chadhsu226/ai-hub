@@ -1,0 +1,44 @@
+name: update-data
+
+on:
+  schedule:
+    # 台股盤中（台北 08:00–14:59，週一至週五）每 10 分鐘；GitHub 排程可能延遲數分鐘
+    - cron: "*/10 0-6 * * 1-5"
+    # 其餘時段每小時一次（新聞、美股、匯率）
+    - cron: "23 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Run pipeline
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          LLM_MODEL: ${{ vars.LLM_MODEL || 'claude-haiku-5-5' }}
+          SENT_WEIGHT: ${{ vars.SENT_WEIGHT || '0.5' }}
+        run: python scripts/pipeline.py
+      - name: Commit data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then echo "no changes"; exit 0; fi
+          git commit -m "data: update $(TZ=Asia/Taipei date '+%Y-%m-%d %H:%M')"
+          git pull --rebase --autostash
+          git push
