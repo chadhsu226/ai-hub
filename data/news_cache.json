@@ -806,5 +806,46 @@
 "tickers": [],
 "reason": "詞典法：正向詞 1、負向詞 3",
 "method": "lexicon"
+},
+"cnyes:6663553": {
+"id": "cnyes:6663553",
+"title": "盤中速報 - 集中市場加權指數下跌-1806.45點至41868.67點，跌幅4.14%",
+"summary": "",
+"url": "https://news.cnyes.com/news/id/6663553",
+"source": "鉅亨網",
+"ts": "2026-11-16T11:19:13+08:00",
+"score": 0.0,
+"sectors": [],
+"tickers": [],
+"reason": "詞典法：正向詞 0、負向詞 0",
+"method": "lexicon"
+},
+"cnyes:6663552": {
+"id": "cnyes:6663552",
+"title": "盤中速報 - 櫃買市場加權指數下跌-18.72點至323.69點，跌幅5.47%",
+"summary": "",
+"url": "https://news.cnyes.com/news/id/6663552",
+"source": "鉅亨網",
+"ts": "2026-11-16T11:19:12+08:00",
+"score": 0.0,
+"sectors": [],
+"tickers": [],
+"reason": "詞典法：正向詞 0、負向詞 0",
+"method": "lexicon"
+},
+"cnyes:6663547": {
+"id": "cnyes:6663547",
+"title": "光寶科參與electronica 2026電子展  聚焦AI電力、網通、Edge AI與輝達MGX架構",
+"summary": "光寶科亮相electronica 2026，聚焦AIDC電力與Edge AI。\n展出110kW、72kW Power Shelf、800 VDC架構等AI電力方案。\n並推企業與邊緣電源、5G、O-RAN、FWA、AI Camera與AI Box，強化地端智慧應用。",
+"url": "https://news.cnyes.com/news/id/6663547",
+"source": "鉅亨網",
+"ts": "2026-11-16T11:11:32+08:00",
+"score": 0.0,
+"sectors": [
+"通信網路"
+],
+"tickers": [],
+"reason": "詞典法：正向詞 0、負向詞 0",
+"method": "lexicon"
 }
 }
