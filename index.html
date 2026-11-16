@@ -75,11 +75,34 @@ table.srcs th{color:var(--dim);letter-spacing:.1em}
 footer{padding:12px 14px 24px;color:var(--dim);font-size:11px;font-family:'Noto Sans TC';line-height:1.7}
 .scan{pointer-events:none;position:fixed;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.012) 0 1px,transparent 1px 3px);z-index:9}
 .empty{color:var(--dim);padding:20px;text-align:center;font-family:'Noto Sans TC'}
+/* ── 密碼畫面 ── */
+body.locked>*:not(#gate):not(.scan){display:none!important}
+#gate{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 70% 0%,#0d1a2b 0%,transparent 55%),radial-gradient(ellipse at 0% 100%,#1a0f05 0%,transparent 50%),var(--bg)}
+body:not(.locked) #gate{display:none}
+.gbox{width:min(360px,90vw);border:1px solid var(--line);background:linear-gradient(180deg,#0c111a,#080b11);border-radius:4px;padding:26px 24px}
+.gbox .brand{margin-bottom:4px}.gbox .sub{margin-bottom:22px}
+.gbox label{display:block;color:var(--dim);font-size:10px;letter-spacing:.16em;margin-bottom:6px}
+.gbox input{width:100%;background:#05070b;border:1px solid var(--line);color:#fff;font:600 15px 'JetBrains Mono',monospace;padding:10px 12px;border-radius:3px;outline:none;letter-spacing:.1em}
+.gbox input:focus{border-color:var(--cyan);box-shadow:0 0 0 1px rgba(63,212,255,.25)}
+.gbox button{margin-top:12px;width:100%;background:transparent;border:1px solid var(--cyan);color:var(--cyan);font:600 12px 'JetBrains Mono',monospace;letter-spacing:.2em;padding:10px;border-radius:3px;cursor:pointer}
+.gbox button:hover{background:rgba(63,212,255,.08)}
+.gerr{min-height:18px;margin-top:10px;color:var(--red);font-size:11px;font-family:'Noto Sans TC'}
+.gnote{margin-top:14px;color:var(--dim);font-size:10px;font-family:'Noto Sans TC';line-height:1.6}
+.shake{animation:shake .35s}@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 @media(max-width:1000px){.c1,.c2,.c3,.c4,.c5,.c6,.c7,.c8{grid-column:span 12}.kpis{grid-template-columns:repeat(3,1fr)}#candle,#nn{height:280px}}
 </style>
 </head>
-<body>
+<body class="locked">
 <div class="scan"></div>
+<div id="gate"><form class="gbox" id="gform" autocomplete="off">
+  <div class="brand">MCU<b>//</b>FIN · AI 投資決策中樞</div>
+  <div class="sub">BETA · 限定存取</div>
+  <label for="gpw">ACCESS CODE · 存取密碼</label>
+  <input id="gpw" type="password" autofocus>
+  <button type="submit">UNLOCK ▸</button>
+  <div class="gerr" id="gerr"></div>
+  <div class="gnote">本頁目前為測試版，僅供受邀者瀏覽。</div>
+</form></div>
 <header>
   <div>
     <div class="brand">MCU<b>//</b>FIN · AI 投資決策中樞</div>
@@ -319,12 +342,48 @@ function connectWS(){try{ws=new WebSocket('wss://data-stream.binance.vision/stre
 async function restCrypto(){try{const r=await fetch('https://data-api.binance.vision/api/v3/ticker/24hr?symbols='+encodeURIComponent(JSON.stringify(CRYPTO))).then(r=>r.json());r.forEach(t=>onTick(t.symbol,+t.lastPrice,+t.openPrice,'Binance REST'))}
  catch(e){try{const g=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true').then(r=>r.json());
   [['BTCUSDT','bitcoin'],['ETHUSDT','ethereum'],['SOLUSDT','solana']].forEach(([s,id])=>{const c=g[id].usd,p=g[id].usd_24h_change;onTick(s,c,c/(1+p/100),'CoinGecko')})}catch(_){}}}
-setInterval(()=>{if(!ws||ws.readyState!==1)restCrypto()},30000);
-setInterval(()=>{drawTape();if(D)drawSrcs()},60000);
+
 
 function loop(){if(D){drawCandle();drawNN();drawSankey()}requestAnimationFrame(loop)}
 window.addEventListener('resize',()=>{g1=fit(cv1);g2=fit(cv2);g3=fit(cv3);g4=fit(cv4);if(D)drawRisk()});
-load();setInterval(load,60000);restCrypto();connectWS();loop();
+// ───────── 密碼閘門（只存 SHA-256 雜湊；通過前不載入資料、不連 Binance） ─────────
+const PW_HASH='26bfd4abaef8326babbc99dce3e0d00ba272bffbbed23fb8d13c98aa9e147816';
+const GATE_KEY='aihub_gate_v1';
+async function sha256hex(str){
+  const buf=new TextEncoder().encode(str);
+  if(window.crypto&&crypto.subtle){try{const h=await crypto.subtle.digest('SHA-256',buf);return[...new Uint8Array(h)].map(b=>b.toString(16).padStart(2,'0')).join('')}catch(_){}}
+  return sha256js(buf);
+}
+function sha256js(bytes){// 備援：非安全環境下沒有 crypto.subtle
+  const K=[1116352408,1899447441,3049323471,3921009573,961987163,1508970993,2453635748,2870763221,3624381080,310598401,607225278,1426881987,1925078388,2162078206,2614888103,3248222580,3835390401,4022224774,264347078,604807628,770255983,1249150122,1555081692,1996064986,2554220882,2821834349,2952996808,3210313671,3336571891,3584528711,113926993,338241895,666307205,773529912,1294757372,1396182291,1695183700,1986661051,2177026350,2456956037,2730485921,2820302411,3259730800,3345764771,3516065817,3600352804,4094571909,275423344,430227734,506948616,659060556,883997877,958139571,1322822218,1537002063,1747873779,1955562222,2024104815,2227730452,2361852424,2428436474,2756734187,3204031479,3329325298];
+  const H=[1779033703,3144134277,1013904242,2773480762,1359893119,2600822924,528734635,1541459225];
+  const l=bytes.length,n=((l+9+63)>>6)<<6,m=new Uint8Array(n);m.set(bytes);m[l]=0x80;const dv=new DataView(m.buffer);dv.setUint32(n-4,l*8);
+  const w=new Uint32Array(64),r=(x,k)=>(x>>>k)|(x<<(32-k));
+  for(let o=0;o<n;o+=64){for(let i=0;i<16;i++)w[i]=dv.getUint32(o+i*4);
+   for(let i=16;i<64;i++){const a=w[i-15],b=w[i-2];w[i]=(w[i-16]+(r(a,7)^r(a,18)^(a>>>3))+w[i-7]+(r(b,17)^r(b,19)^(b>>>10)))>>>0}
+   let [a,b,c,d,e,f,g,h]=H;
+   for(let i=0;i<64;i++){const t1=(h+(r(e,6)^r(e,11)^r(e,25))+((e&f)^(~e&g))+K[i]+w[i])>>>0,t2=((r(a,2)^r(a,13)^r(a,22))+((a&b)^(a&c)^(b&c)))>>>0;h=g;g=f;f=e;e=(d+t1)>>>0;d=c;c=b;b=a;a=(t1+t2)>>>0}
+   H[0]=(H[0]+a)>>>0;H[1]=(H[1]+b)>>>0;H[2]=(H[2]+c)>>>0;H[3]=(H[3]+d)>>>0;H[4]=(H[4]+e)>>>0;H[5]=(H[5]+f)>>>0;H[6]=(H[6]+g)>>>0;H[7]=(H[7]+h)>>>0}
+  return H.map(x=>x.toString(16).padStart(8,'0')).join('');
+}
+let started=false;
+function startDashboard(){if(started)return;started=true;
+ document.body.classList.remove('locked');
+ g1=fit(cv1);g2=fit(cv2);g3=fit(cv3);g4=fit(cv4);
+ load();setInterval(load,60000);restCrypto();connectWS();loop();
+ setInterval(()=>{if(!ws||ws.readyState!==1)restCrypto()},30000);
+ setInterval(()=>{drawTape();if(D)drawSrcs()},60000);
+}
+(function initGate(){
+ let ok=false;try{ok=sessionStorage.getItem(GATE_KEY)===PW_HASH}catch(_){}
+ if(ok){startDashboard();return}
+ const f=$('gform'),inp=$('gpw'),err=$('gerr');setTimeout(()=>inp.focus(),50);
+ f.addEventListener('submit',async ev=>{ev.preventDefault();
+  const h=await sha256hex(inp.value.trim());
+  if(h===PW_HASH){try{sessionStorage.setItem(GATE_KEY,h)}catch(_){}startDashboard()}
+  else{err.textContent='密碼錯誤，請再試一次。';inp.value='';f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');inp.focus()}
+ });
+})();
 </script>
 </body>
 </html>
