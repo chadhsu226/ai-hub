@@ -1,5 +1,77 @@
 [
 {
+"ts": "2026-11-19T21:34:09+08:00",
+"agent": "SYSTEM",
+"msg": "完成：8/9 來源成功 (+26s)",
+"level": "info"
+},
+{
+"ts": "2026-11-19T21:34:09+08:00",
+"agent": "ALLOC",
+"msg": "建議權重 台股 34% / 美股 20% / 債券 25% / 加密資產 1% / 現金 19%",
+"level": "info"
+},
+{
+"ts": "2026-11-19T21:34:09+08:00",
+"agent": "MOMENTUM",
+"msg": "TAIEX RSI14=30.3 20日動能=-16.99% 費半前一日=+0.10%",
+"level": "info"
+},
+{
+"ts": "2026-11-19T21:34:09+08:00",
+"agent": "RISK",
+"msg": "OOS 策略 Sharpe=1.61 MDD=20.0% VaR95=2.50%",
+"level": "info"
+},
+{
+"ts": "2026-11-19T21:34:09+08:00",
+"agent": "MODEL",
+"msg": "邏輯斯迴歸 P_factor=0.554 → 疊加情緒 P_ens=0.566；OOS 準確率 55.2%（基準 56.6%）AUC=0.510",
+"level": "info"
+},
+{
+"ts": "2026-11-19T21:34:06+08:00",
+"agent": "SENTIMENT",
+"msg": "48h 加權情緒 EMA=+0.095（方法：lexicon）",
+"level": "info"
+},
+{
+"ts": "2026-11-19T21:34:06+08:00",
+"agent": "FETCH",
+"msg": "新聞 50 則（新進 50 則待評分）",
+"level": "info"
+},
+{
+"ts": "2026-11-19T21:34:04+08:00",
+"agent": "FETCH",
+"msg": "FRED DGS10 失敗：HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read",
+"level": "warn"
+},
+{
+"ts": "2026-11-19T21:33:50+08:00",
+"agent": "FETCH",
+"msg": "TWSE MI_INDEX 265 檔指數（資料日 2026-11-18）",
+"level": "info"
+},
+{
+"ts": "2026-11-19T21:33:49+08:00",
+"agent": "FETCH",
+"msg": "2330 K 線 266 根（Yahoo Finance 1m）",
+"level": "info"
+},
+{
+"ts": "2026-11-19T21:33:47+08:00",
+"agent": "FETCH",
+"msg": "KPI TAIEX 加權指數=38,426.89 · 2330 台積電=2,100.00 · USD / TWD=32.90 · VIX 恐慌指數=22.21 · 費城半導體=9,652.80",
+"level": "info"
+},
+{
+"ts": "2026-11-19T21:33:43+08:00",
+"agent": "SYSTEM",
+"msg": "管線啟動 2026-11-19 21:33 (Asia/Taipei) (+0s)",
+"level": "info"
+},
+{
 "ts": "2026-11-19T12:56:23+08:00",
 "agent": "SYSTEM",
 "msg": "完成：8/9 來源成功 (+21s)",
@@ -1123,78 +1195,6 @@
 },
 {
 "ts": "2026-11-16T11:48:23+08:00",
-"agent": "FETCH",
-"msg": "FRED DGS10 失敗：HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read",
-"level": "warn"
-},
-{
-"ts": "2026-11-16T11:48:09+08:00",
-"agent": "FETCH",
-"msg": "TWSE MI_INDEX 267 檔指數（資料日 2026-11-13）",
-"level": "info"
-},
-{
-"ts": "2026-11-16T11:48:08+08:00",
-"agent": "FETCH",
-"msg": "2330 K 線 148 根（Yahoo Finance 1m）",
-"level": "info"
-},
-{
-"ts": "2026-11-16T11:48:07+08:00",
-"agent": "FETCH",
-"msg": "KPI TAIEX 加權指數=41,706.34 · 2330 台積電=2,270.00 · USD / TWD=32.97 · VIX 恐慌指數=19.30 · 費城半導體=10,146.32",
-"level": "info"
-},
-{
-"ts": "2026-11-16T11:48:05+08:00",
-"agent": "SYSTEM",
-"msg": "管線啟動 2026-11-16 11:48 (Asia/Taipei) (+0s)",
-"level": "info"
-},
-{
-"ts": "2026-11-16T11:35:29+08:00",
-"agent": "SYSTEM",
-"msg": "完成：8/9 來源成功 (+23s)",
-"level": "info"
-},
-{
-"ts": "2026-11-16T11:35:29+08:00",
-"agent": "ALLOC",
-"msg": "建議權重 台股 32% / 美股 20% / 債券 25% / 加密資產 1% / 現金 22%",
-"level": "info"
-},
-{
-"ts": "2026-11-16T11:35:29+08:00",
-"agent": "MOMENTUM",
-"msg": "TAIEX RSI14=45.0 20日動能=-10.18% 費半前一日=-0.54%",
-"level": "info"
-},
-{
-"ts": "2026-11-16T11:35:29+08:00",
-"agent": "RISK",
-"msg": "OOS 策略 Sharpe=2.05 MDD=17.3% VaR95=2.28%",
-"level": "info"
-},
-{
-"ts": "2026-11-16T11:35:29+08:00",
-"agent": "MODEL",
-"msg": "邏輯斯迴歸 P_factor=0.517 → 疊加情緒 P_ens=0.527；OOS 準確率 54.9%（基準 56.9%）AUC=0.511",
-"level": "info"
-},
-{
-"ts": "2026-11-16T11:35:26+08:00",
-"agent": "SENTIMENT",
-"msg": "48h 加權情緒 EMA=+0.083（方法：lexicon）",
-"level": "info"
-},
-{
-"ts": "2026-11-16T11:35:26+08:00",
-"agent": "FETCH",
-"msg": "新聞 50 則（新進 3 則待評分）",
-"level": "info"
-},
-{
-"ts": "2026-11-16T11:35:24+08:00",
 "agent": "FETCH",
 "msg": "FRED DGS10 失敗：HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read",
 "level": "warn"
